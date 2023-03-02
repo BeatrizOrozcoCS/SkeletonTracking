@@ -62,7 +62,7 @@
             <TextBlock DockPanel.Dock="Right" Margin="0 0 -1 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Skeleton Basics</TextBlock>
 
         </DockPanel>
-        <Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Left" Width="518" Margin="0,91,0,79" Grid.ColumnSpan="2">
+        <Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Left" Width="518" Margin="0,149,0,5" Grid.ColumnSpan="2">
             <Image Name="Image" Width="640" Height="480"/>
         </Viewbox>
         <StatusBar Grid.Row="3" Name="statusBar" VerticalAlignment="Center" Background="White" Foreground="{StaticResource MediumGreyBrush}" Grid.ColumnSpan="2"/>
@@ -71,5 +71,6 @@
         <TextBox x:Name="txtActivityName" HorizontalAlignment="Left" Height="57" Margin="10,10,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Input Activity here" VerticalAlignment="Top" Width="408" Grid.ColumnSpan="2"/>
         <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Height="28" Margin="351,19,0,0" Grid.Row="1" VerticalAlignment="Top" Width="70" Click="btnStart_Click" Grid.Column="1"/>
         <Label x:Name="lblKinectStatus" Content="" HorizontalAlignment="Left" Height="34" Margin="177,620,0,0" Grid.Row="1" VerticalAlignment="Top" Width="244" Grid.Column="1"/>
+        <Label x:Name="lblTrackingState" Content="Not Tracking" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="30" Margin="44,87,0,0" Grid.Row="1" VerticalAlignment="Top" Width="374"/>
     </Grid>
 </Window>

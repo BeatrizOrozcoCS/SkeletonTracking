@@ -17,7 +17,7 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
     using System.Windows.Shell;
     using Microsoft.Kinect;
     using static System.Net.Mime.MediaTypeNames;
-
+    using System.Globalization;
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -91,6 +91,10 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
+        /// 
+
+        //varibale
+        public bool trackerVar = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -368,20 +372,20 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
             drawingContext.DrawLine(drawPen, this.SkeletonPointToScreen(joint0.Position), this.SkeletonPointToScreen(joint1.Position));
         }
 
-        private void writeInfo(Skeleton skeleton)
+        private void writeInfo(string []info, string activityName)
         {
-            string[] info = new string[80]; //80 data points - 1 label, - state
+            //string[] info = new string[150]; //80 data points - 1 label, - state
             int i = 0;
-            DepthImagePoint jointDepth;
-            foreach (Joint joint in skeleton.Joints)
-            {
-                info[i] = joint.Position.X.ToString("0.00");
-                info[i+1] = joint.Position.Y.ToString("0.00");
-                info[i+2] = joint.Position.Z.ToString("0.00");
-                jointDepth = this.sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(joint.Position, DepthImageFormat.Resolution640x480Fps30);
-                info[i + 3] = jointDepth.Depth.ToString("0.00");
-                i +=4;
-            }
+            //DepthImagePoint jointDepth;
+            //foreach (Joint joint in skeleton.Joints)
+            //{
+            //    info[i] = joint.Position.X.ToString("0.00");
+            //    info[i+1] = joint.Position.Y.ToString("0.00");
+            //    info[i+2] = joint.Position.Z.ToString("0.00");
+            //    jointDepth = this.sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(joint.Position, DepthImageFormat.Resolution640x480Fps30);
+            //    info[i + 3] = jointDepth.Depth.ToString("0.00");
+            //    i +=4;
+            //}
 
             string infoline = "";
             for (i =0; i< info.Length; i++)
@@ -397,36 +401,45 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
                
             }
   
-            File.AppendAllText("new.txt", infoline);
+            File.AppendAllText(activityName+".txt", infoline);
         }
         private void getInfo(Skeleton skeleton)
         {
-            string[] info = new string[80];
-            int i = 0;
+            string[] info = new string[121];
+            int i = 1;
+            info[0] = DateTime.Now.ToString();
             DepthImagePoint jointDepth;
             foreach (Joint joint in skeleton.Joints)
             {
+                
                 if (joint.TrackingState == JointTrackingState.Tracked)
                 {
-                    info[i] = joint.Position.X.ToString("0.00");
-                    info[i + 1] = joint.Position.Y.ToString("0.00");
-                    info[i + 2] = joint.Position.Z.ToString("0.00");
+                    info[i] = joint.JointType.ToString(); 
+                    info[i + 1] = joint.TrackingState.ToString();
+                    info[i+2] = joint.Position.X.ToString("0.00");
+                    info[i + 3] = joint.Position.Y.ToString("0.00");
+                    info[i + 4] = joint.Position.Z.ToString("0.00");
                     jointDepth = this.sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(joint.Position, DepthImageFormat.Resolution640x480Fps30);
-                    info[i + 3] = jointDepth.Depth.ToString("0.00");
-                    i += 4;
+                    info[i + 5] = jointDepth.Depth.ToString("0.00");
+                    i += 6;
                 }
                 else
                 {
-                    info[i] = "-1";
-                    info[i + 1] = "-1";
-                    info[i + 2] = "-1";
+                    info[i] = joint.JointType.ToString();
+                    info[i + 1] = joint.TrackingState.ToString();
+                    info[i+2] = "NA";
+                    info[i + 3] = "NA";
+                    info[i + 4] = "NA";
                     jointDepth = this.sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(joint.Position, DepthImageFormat.Resolution640x480Fps30);
-                    info[i + 3] = "-1";
-                    i += 4;
+                    info[i + 5] = "NA";
+                    i += 6;
                 }
             }
-
-            writeInfo(skeleton); 
+            if(trackerVar == true)
+            {
+                writeInfo(info,txtActivityName.Text); 
+            }
+            
             Position.Text =
                 "X Position: " + string.Format("{0:N2}", skeleton.Position.X) + "\n"
                 + "Y Position: " + string.Format("{0:N2}", skeleton.Position.Y) + "\n"
@@ -439,14 +452,14 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
                 + "ShoulderLeft (X,Y,Z): (" + info[8] + "," + info[9] + "," + info[10] + ")\n"
                 + "ShoulderRight (X,Y,Z): (" + info[12] + "," + info[13] + "," + info[14] + ")\n"
 
-                + "Spine Position (X,Y,Z): (" + skeleton.Joints[JointType.Spine].Position.X.ToString("0.00") + "," + skeleton.Joints[JointType.Spine].Position.Y.ToString("0.00") + "," + skeleton.Joints[JointType.Spine].Position.Z.ToString("0.00") + ")\n"
+                + "Spine Position (X,Y,Z): (" + info[12] + "," + info[13] + "," + info[14] + ")\n"
 
-                 + "HipCenter (X,Y,Z): (" + skeleton.Joints[JointType.HipCenter].Position.X.ToString("0.00") + "," + skeleton.Joints[JointType.HipCenter].Position.Y.ToString("0.00") + "," + skeleton.Joints[JointType.HipCenter].Position.Z.ToString("0.00") + ")\n"
-                + "HipLeft (X,Y,Z): (" + skeleton.Joints[JointType.HipLeft].Position.X.ToString("0.00") + "," + skeleton.Joints[JointType.HipLeft].Position.Y.ToString("0.00") + "," + skeleton.Joints[JointType.HipLeft].Position.Z.ToString("0.00") + ")\n"
-                + "HipRight (X,Y,Z): (" + skeleton.Joints[JointType.HipRight].Position.X.ToString("0.00") + "," + skeleton.Joints[JointType.HipRight].Position.Y.ToString("0.00") + "," + skeleton.Joints[JointType.HipRight].Position.Z.ToString("0.00") + ")\n"
+                 + "HipCenter (X,Y,Z): (" + info[12] + "," + info[13] + "," + info[14] + ")\n" 
+                + "HipLeft (X,Y,Z): (" + info[12] + "," + info[13] + "," + info[14] + ")\n"
+                + "HipRight (X,Y,Z): (" + info[12] + "," + info[13] + "," + info[14] + ")\n"
 
 
-                + "ElbowLeft (X,Y,Z): (" + skeleton.Joints[JointType.ElbowLeft].Position.X.ToString("0.00") + "," + skeleton.Joints[JointType.ElbowLeft].Position.Y.ToString("0.00") + "," + skeleton.Joints[JointType.ElbowLeft].Position.Z.ToString("0.00") + ")\n"
+                + "ElbowLeft (X,Y,Z): (" + info[12] + "," + info[13] + "," + info[14] + ")\n"
                 + "WristLeft (X,Y,Z): (" + skeleton.Joints[JointType.WristLeft].Position.X.ToString("0.00") + "," + skeleton.Joints[JointType.WristLeft].Position.Y.ToString("0.00") + "," + skeleton.Joints[JointType.WristLeft].Position.Z.ToString("0.00") + ")\n"
                 + "HandLeft (X,Y,Z): (" + skeleton.Joints[JointType.HandLeft].Position.X.ToString("0.00") + "," + skeleton.Joints[JointType.HandLeft].Position.Y.ToString("0.00") + "," + skeleton.Joints[JointType.HandLeft].Position.Z.ToString("0.00") + ")\n"
 
@@ -555,7 +568,16 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
 */
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
-
+            if (trackerVar ==false)
+            {
+                trackerVar = true;
+                lblTrackingState.Content = "Tracking";
+            }
+            else
+            {
+                trackerVar = false;
+                lblTrackingState.Content = "Not Tracking";
+            }
         }
     }
 }

@@ -18,6 +18,8 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
     using Microsoft.Kinect;
     using static System.Net.Mime.MediaTypeNames;
     using System.Globalization;
+    using System.Windows.Documents;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -239,7 +241,7 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
                         if (skel.TrackingState == SkeletonTrackingState.Tracked)
                         {
                             this.DrawBonesAndJoints(skel, dc);
-                            this.getInfo(skel);
+                            this.getInfo(skel); //getting info
                         }
                         else if (skel.TrackingState == SkeletonTrackingState.PositionOnly)
                         {
@@ -405,7 +407,7 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
         }
         private void getInfo(Skeleton skeleton)
         {
-            string[] info = new string[121];
+            string[] info = new string[101];
             int i = 1;
             info[0] = DateTime.Now.ToString();
             DepthImagePoint jointDepth;
@@ -414,29 +416,30 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
                 
                 if (joint.TrackingState == JointTrackingState.Tracked)
                 {
-                    info[i] = joint.JointType.ToString(); 
-                    info[i + 1] = joint.TrackingState.ToString();
-                    info[i+2] = joint.Position.X.ToString("0.00");
-                    info[i + 3] = joint.Position.Y.ToString("0.00");
-                    info[i + 4] = joint.Position.Z.ToString("0.00");
+                
+                    //info[i] = joint.TrackingState.ToString();//
+                    info[i] = joint.Position.X.ToString();
+                    info[i + 1] = joint.Position.Y.ToString();
+                    info[i + 2] = joint.Position.Z.ToString();
                     jointDepth = this.sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(joint.Position, DepthImageFormat.Resolution640x480Fps30);
-                    info[i + 5] = jointDepth.Depth.ToString("0.00");
-                    i += 6;
+                    info[i + 3] = jointDepth.Depth.ToString();
+                    i += 4;
                 }
                 else
                 {
-                    info[i] = joint.JointType.ToString();
-                    info[i + 1] = joint.TrackingState.ToString();
-                    info[i+2] = "NA";
-                    info[i + 3] = "NA";
-                    info[i + 4] = "NA";
+                  
+                    //info[i] = joint.TrackingState.ToString();// 
+                    info[i] = "NA";
+                    info[i + 1] = "NA";
+                    info[i + 2] = "NA";
                     jointDepth = this.sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(joint.Position, DepthImageFormat.Resolution640x480Fps30);
-                    info[i + 5] = "NA";
-                    i += 6;
+                    info[i + 3] = "NA";
+                    i += 4;
                 }
             }
             if(trackerVar == true)
             {
+                //writeCols(txtActivityName.Text);
                 writeInfo(info,txtActivityName.Text); 
             }
             
@@ -571,13 +574,182 @@ namespace Microsoft.Samples.Kinect.SkeletonBasics
             if (trackerVar ==false)
             {
                 trackerVar = true;
+                //writeCols(txtActivityName.Text);
                 lblTrackingState.Content = "Tracking";
+                
             }
             else
             {
                 trackerVar = false;
                 lblTrackingState.Content = "Not Tracking";
             }
+        }
+
+
+        private void writeCols(string fileName)
+        {
+            string[] columnName = new string[81];
+
+            columnName[0] = "DateTime";
+
+            columnName[1] = "HipCenter X";
+            columnName[2] = "HipCenter Y";
+            columnName[3] = "HipCenter Z";
+            columnName[4] = "HipCenter Depth";
+
+
+            columnName[5] = "Spine X";
+            columnName[6] = "Spine Y";
+            columnName[7] = "Spine Z";
+            columnName[8] = "Spine Depth";
+
+
+            columnName[9] = "ShoulderCenter X";
+            columnName[10] = "ShoulderCenter Y";
+            columnName[11] = "ShoulderCenter Z";
+            columnName[12] = "ShoulderCenter Depth";
+
+
+            columnName[13] = "Head X";
+            columnName[14] = "Head Y";
+            columnName[15] = "Head Z";
+            columnName[16] = "Head Depth";
+
+
+            columnName[17] = "ShoulderLeft X";
+            columnName[18] = "ShoulderLeft Y";
+            columnName[19] = "ShoulderLeft Z";
+            columnName[20] = "ShoulderLeft Depth";
+
+
+            columnName[21] = "ElbowLeft X";
+            columnName[22] = "ElbowLeft Y";
+            columnName[23] = "ElbowLeft Z";
+            columnName[24] = "ElbowLeft Depth";
+
+
+            columnName[25] = "WristLeft X";
+            columnName[26] = "WristLeft Y";
+            columnName[27] = "WristLeft Z";
+            columnName[28] = "WristLeft Depth";
+
+            columnName[29] = "HandLeft X";
+            columnName[30] = "HandLeft Y";
+            columnName[31] = "HandLeft Z";
+            columnName[32] = "HandLeft Depth";
+
+
+            columnName[33] = "ShoulderRight X";
+            columnName[34] = "ShoulderRight Y";
+            columnName[35] = "ShoulderRight Z";
+            columnName[36] = "ShoulderRight Depth";
+
+
+
+
+            columnName[37] = "ElbowRight X";
+            columnName[38] = "ElbowRight Y";
+            columnName[39] = "ElbowRight Z";
+            columnName[40] = "ElbowRight Depth";
+
+
+            columnName[41] = "WristRight X";
+            columnName[42] = "WristRight Y";
+            columnName[43] = "WristRight Z";
+            columnName[44] = "WristRight Depth";
+
+
+
+
+            columnName[45] = "HandRight X";
+            columnName[46] = "HandRight Y";
+            columnName[47] = "HandRight Z";
+            columnName[48] = "HandRight Depth";
+
+
+
+
+            columnName[49] = "HipLeft X";
+            columnName[50] = "HipLeft Y";
+            columnName[51] = "HipLeft Z";
+            columnName[52] = "HipLeft Depth";
+
+
+
+
+            columnName[53] = "KneeLeft X";
+            columnName[54] = "KneeLeft Y";
+            columnName[55] = "KneeLeft Z";
+            columnName[56] = "KneeLeft Depth";
+
+
+
+
+            columnName[57] = "AnkleLeft X";
+            columnName[58] = "AnkleLeft Y";
+            columnName[59] = "AnkleLeft Z";
+            columnName[60] = "AnkleLeft Depth";
+
+
+
+
+            columnName[61] = "FootLeft X";
+            columnName[62] = "FootLeft Y";
+            columnName[63] = "FootLeft Z";
+            columnName[64] = "FootLeft Depth";
+
+
+
+
+            columnName[65] = "HipRight X";
+            columnName[67] = "HipRight Y";
+            columnName[68] = "HipRight Z";
+            columnName[69] = "HipRight Depth";
+
+
+
+
+            columnName[70] = "KneeRight X";
+            columnName[71] = "KneeRight Y";
+            columnName[72] = "KneeRight Z";
+            columnName[73] = "KneeRight Depth";
+
+
+
+
+            columnName[74] = "AnkleRight X";
+            columnName[75] = "AnkleRight Y";
+            columnName[76] = "AnkleRight Z";
+            columnName[77] = "AnkleRight Depth";
+
+
+
+
+            columnName[78] = "FootRight X";
+            columnName[79] = "FootRight Y";
+            columnName[80] = "FootRight Z";
+            columnName[81] = "FootRight Depth";
+
+            
+
+
+
+
+
+            string columns = "";
+            for (int i = 0; i < columnName.Length; i++)
+            {
+                if (i == columnName.Length - 1)
+                {
+                    columns += columnName[i] + "\n";
+                }
+                else
+                {
+                    columns += columnName[i] + ",";
+                }
+
+            }
+            File.AppendAllText(fileName + ".txt", columns);
         }
     }
 }
